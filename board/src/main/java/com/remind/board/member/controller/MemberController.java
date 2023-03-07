@@ -5,6 +5,7 @@ import com.remind.board.member.domain.dto.SignInForm;
 import com.remind.board.member.domain.dto.SignUpForm;
 import com.remind.board.member.domain.dto.SignUpResponse;
 import com.remind.board.member.service.MemberSignService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,12 +22,12 @@ public class MemberController {
   private final MemberSignApplication memberSignApplication;
 
   @PostMapping("/sign-up")
-  public ResponseEntity<SignUpResponse> memberSignUp(@RequestBody SignUpForm form) {
+  public ResponseEntity<SignUpResponse> memberSignUp(@Valid @RequestBody SignUpForm form) {
     return ResponseEntity.ok(memberSignService.memberSignUp(form));
   }
 
   @PostMapping("/sign-in")
-  public ResponseEntity<String> memberSignIn(@RequestBody SignInForm form) {
+  public ResponseEntity<String> memberSignIn(@Valid @RequestBody SignInForm form) {
     return ResponseEntity.ok(memberSignApplication.memberSignIn(form));
   }
 
