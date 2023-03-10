@@ -8,6 +8,8 @@ import com.remind.board.board.domain.dto.AddBoardForm;
 import com.remind.board.board.domain.dto.AddBoardResponse;
 import com.remind.board.board.domain.dto.AddUnitBoardCardForm;
 import com.remind.board.board.domain.dto.BoardDto;
+import com.remind.board.board.domain.dto.UpdateBoardCardResponse;
+import com.remind.board.board.domain.dto.UpdateUnitBoardCardForm;
 import com.remind.board.board.service.BoardCardService;
 import com.remind.board.board.service.BoardService;
 import java.util.List;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,5 +62,15 @@ public class BoardController {
     String refinedToken = token.substring(TOKEN_PREFIX.length());
     return ResponseEntity.ok(AddBoardCardResponse.from(boardCardService.addBoardCard(refinedToken, form)));
   }
+
+  @PutMapping("/card")
+  @PreAuthorize("hasAuthority('MEMBER')")
+  public ResponseEntity<?> updateBoardCard(@RequestHeader(value = TOKEN_HEADER) String token, @Valid @RequestBody
+      UpdateUnitBoardCardForm form) {
+
+    String refinedToken = token.substring(TOKEN_PREFIX.length());
+    return ResponseEntity.ok(UpdateBoardCardResponse.from(boardCardService.updateBoardCard(refinedToken, form)));
+  }
+
 
 }

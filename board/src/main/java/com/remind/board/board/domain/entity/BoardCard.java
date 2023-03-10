@@ -2,6 +2,7 @@ package com.remind.board.board.domain.entity;
 
 import com.remind.board.board.domain.dto.AddBoardCardForm;
 import com.remind.board.board.domain.dto.AddUnitBoardCardForm;
+import com.remind.board.board.domain.dto.UpdateUnitBoardCardForm;
 import com.remind.board.common.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,6 +44,7 @@ public class BoardCard extends BaseEntity {
   @JoinColumn(name = "board_id")
   private Board board;
 
+  /* board 등록 시, cascade 옵션에 따라 board card 여러 개 동시 등록 시 필요 entity 반환 */
   public static BoardCard from(AddBoardCardForm form) {
     return BoardCard.builder()
         .url(form.getUrl())
@@ -51,7 +53,7 @@ public class BoardCard extends BaseEntity {
         .build();
   }
 
-  /* board card 단일 등록 시 사용 */
+  /* board card 단일 등록에 필요한 entity 반환 */
   public static BoardCard of(Board board, AddUnitBoardCardForm form) {
     return BoardCard.builder()
         .url(form.getUrl())
@@ -60,4 +62,15 @@ public class BoardCard extends BaseEntity {
         .board(board)
         .build();
   }
+
+  /* board card 단일 update */
+  public BoardCard updateBoardCard(Board board, UpdateUnitBoardCardForm form) {
+
+    this.url = form.getUrl();
+    this.description = form.getDescription();
+    this.cardOrders = form.getCardOrders();
+    this.board = board;
+    return this;
+  }
+
 }
