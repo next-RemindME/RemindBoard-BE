@@ -24,6 +24,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
   @Override
   public List<BoardDto> showMembersBoard(Long memberId) {
 
+    //board order 후, board card order에 따라 내부 card들을 정렬합니다.
     QBoard board = QBoard.board;
     QBoardCard boardCard = QBoardCard.boardCard;
 
@@ -33,14 +34,44 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         .on(board.member.id.eq(memberId))
         .orderBy(board.boardOrders.asc(), boardCard.cardOrders.asc())
         .transform(
-            groupBy(board.id).as(new QBoardDto(
-                board.id,
-                board.boardName,
-                board.boardOrders,
-                set(new QBoardDto_BoardCardDto(boardCard.id, boardCard.url, boardCard.description,
-                    boardCard.cardOrders)),
-                board.shareYn
-            ))
+            groupBy(board.id).as(
+                new QBoardDto(
+                    board.id,
+                    board.boardName,
+                    board.boardOrders,
+                    set(new QBoardDto_BoardCardDto(boardCard.id, boardCard.url,
+                        boardCard.description, boardCard.cardOrders)),
+                    board.shareYn
+                ))
+        );
+
+    return resultMap.keySet().stream()
+        .map(resultMap::get)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<BoardDto> showSharedBoard() {
+
+    //board data 변경 순대로 정렬한 후, board card order에 따라 내부 card들을 정렬합니다.
+    QBoard board = QBoard.board;
+    QBoardCard boardCard = QBoardCard.boardCard;
+
+    Map<Long, BoardDto> resultMap = jpaQueryFactory
+        .from(board)
+        .join(board.boardCards, boardCard)
+        .on(board.shareYn.eq(true))
+        .orderBy(board.modifiedAt.desc(), boardCard.cardOrders.asc())
+        .transform(
+            groupBy(board.id).as(
+                new QBoardDto(
+                    board.id,
+                    board.boardName,
+                    board.boardOrders,
+                    set(new QBoardDto_BoardCardDto(boardCard.id, boardCard.url,
+                        boardCard.description, boardCard.cardOrders)),
+                    board.shareYn
+                ))
         );
 
     return resultMap.keySet().stream()

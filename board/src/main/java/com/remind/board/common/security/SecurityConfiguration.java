@@ -33,7 +33,7 @@ public class SecurityConfiguration {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authorizeRequests()
-        .antMatchers("/**/sign-up", "/**/sign-in").permitAll()
+        .antMatchers("/**/sign-up", "/**/sign-in", "/**/shared").permitAll()
         .and()
         .addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     return http.build();

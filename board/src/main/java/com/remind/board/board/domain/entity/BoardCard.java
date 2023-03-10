@@ -1,6 +1,7 @@
 package com.remind.board.board.domain.entity;
 
 import com.remind.board.board.domain.dto.AddBoardCardForm;
+import com.remind.board.board.domain.dto.AddUnitBoardCardForm;
 import com.remind.board.common.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,6 +48,16 @@ public class BoardCard extends BaseEntity {
         .url(form.getUrl())
         .description(form.getDescription())
         .cardOrders(form.getCardOrders())
+        .build();
+  }
+
+  /* board card 단일 등록 시 사용 */
+  public static BoardCard of(Board board, AddUnitBoardCardForm form) {
+    return BoardCard.builder()
+        .url(form.getUrl())
+        .description(form.getDescription())
+        .cardOrders(form.getCardOrders())
+        .board(board)
         .build();
   }
 }

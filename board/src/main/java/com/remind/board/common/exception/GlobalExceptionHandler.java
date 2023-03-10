@@ -1,5 +1,6 @@
 package com.remind.board.common.exception;
 
+import com.remind.board.common.exception.customexception.BoardException;
 import com.remind.board.common.exception.customexception.MemberException;
 import com.remind.board.common.exception.model.ErrorResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,9 @@ public class GlobalExceptionHandler {
             .build());
   }
 
+  /**
+   * MemberException 발생 시, exception handler
+   * */
   @ExceptionHandler({MemberException.class})
   public ResponseEntity<ErrorResponse> memberExceptionHandler(HttpServletRequest request, MemberException e) {
 
@@ -39,6 +43,20 @@ public class GlobalExceptionHandler {
         .body(ErrorResponse.builder()
             .code(e.getMemberErrorCode().name())
             .message(e.getMemberErrorCode().getDescription())
+            .status(e.getStatus())
+            .build());
+  }
+
+  /**
+   * BoardException 발생 시, exception handler
+   * */
+  @ExceptionHandler({BoardException.class})
+  public ResponseEntity<ErrorResponse> boardExceptionHandler(HttpServletRequest request, BoardException e) {
+
+    return ResponseEntity.status(e.getStatus())
+        .body(ErrorResponse.builder()
+            .code(e.getBoardErrorCode().name())
+            .message(e.getBoardErrorCode().getDescription())
             .status(e.getStatus())
             .build());
   }
