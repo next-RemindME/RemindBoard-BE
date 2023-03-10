@@ -11,4 +11,7 @@ public interface BoardCardService {
 
   /* board card 단일 update */
   BoardCard updateBoardCard(String refinedToken, UpdateUnitBoardCardForm form);
+
+  /* board card 단일 삭제 */
+  void deleteBoardCard(String refinedToken, Long boardCardId);
 }
