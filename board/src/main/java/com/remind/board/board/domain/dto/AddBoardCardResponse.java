@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardCardResponse {
+public class AddBoardCardResponse {
 
   private Long boardCardId;
   private String url;
@@ -21,8 +21,8 @@ public class BoardCardResponse {
    * BoardCard 엔티티를 BoardCardResponse로 변환해주는 메서드
    * (front로 data 전달 시, 엔티티 자체를 그대로 반환하지 않고 각 컨트롤러마다 용도에 맞게 response용 dto를 반환합니다)
    * */
-  public static BoardCardResponse from(BoardCard boardCard) {
-    return BoardCardResponse.builder()
+  public static AddBoardCardResponse from(BoardCard boardCard) {
+    return AddBoardCardResponse.builder()
         .boardCardId(boardCard.getId())
         .url(boardCard.getUrl())
         .description(boardCard.getDescription())

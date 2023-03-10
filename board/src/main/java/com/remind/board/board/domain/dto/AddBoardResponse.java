@@ -12,21 +12,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardResponse {
+public class AddBoardResponse {
 
   private Long boardId;
   private String boardName;
   private String boardOrders;
-  private List<BoardCardResponse> boardCards;
+  private List<AddBoardCardResponse> boardCards;
 
-  public static BoardResponse from(Board board) {
-    return BoardResponse.builder()
+  public static AddBoardResponse from(Board board) {
+    return AddBoardResponse.builder()
         .boardId(board.getId())
         .boardName(board.getBoardName())
         .boardOrders(board.getBoardOrders())
         .boardCards(
             board.getBoardCards()
-                .stream().map(boardCard -> BoardCardResponse.from(boardCard))
+                .stream().map(boardCard -> AddBoardCardResponse.from(boardCard))
                 .collect(Collectors.toList()))
         .build();
   }
