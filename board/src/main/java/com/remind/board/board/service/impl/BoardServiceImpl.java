@@ -13,6 +13,7 @@ import com.remind.board.member.domain.repository.MemberRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ public class BoardServiceImpl implements BoardService {
     return boardRepository.showSharedBoard();
   }
 
+  @Transactional
   @Override
   public Board addBoard(String refinedToken, AddBoardForm form) {
 
