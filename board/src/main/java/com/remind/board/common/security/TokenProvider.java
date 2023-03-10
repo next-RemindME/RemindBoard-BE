@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,11 +15,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TokenProvider {
 
-  private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 30; //30 days
+  private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 10; //10 days
   private static final String KEY_ROLES = "roles";
 
   private final MemberSignService memberSignService;
@@ -47,6 +49,7 @@ public class TokenProvider {
   public Authentication getAuthentication(String jwt) {
 
     String keyRoles = getKeyRoles(jwt);
+    log.info("get key roles by jwt -> {}", keyRoles);
 
     //MEMBER 권한 부여 (board crud 가능)
     if (ROLE_MEMBER.equals(keyRoles)) {
