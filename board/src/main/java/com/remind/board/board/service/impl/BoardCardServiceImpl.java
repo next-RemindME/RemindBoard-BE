@@ -58,6 +58,22 @@ public class BoardCardServiceImpl implements BoardCardService {
     return boardCard.updateBoardCard(board, form);
   }
 
+  @Transactional
+  @Override
+  public void deleteBoardCard(String refinedToken, Long boardCardId) {
+
+    Member member = getMemberByToken(refinedToken);
+
+    BoardCard boardCard = boardCardRepository.findById(boardCardId)
+        .orElseThrow(() -> new BoardException(BoardErrorCode.NOT_EXIST_CARD));
+
+    if (!member.getId().equals(boardCard.getBoard().getMember().getId())) {
+      throw new BoardException(BoardErrorCode.NOT_ACCEPT_REWRITE);
+    }
+
+    boardCardRepository.delete(boardCard);
+  }
+
   private Board getBoardById(Long boardId) {
 
     Board board = boardRepository.findById(boardId)

@@ -17,12 +17,14 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -48,7 +50,8 @@ public class BoardController {
 
   @PostMapping
   @PreAuthorize("hasAuthority('MEMBER')")
-  public ResponseEntity<AddBoardResponse> addBoard(@RequestHeader(value = TOKEN_HEADER) String token, @Valid @RequestBody AddBoardForm form) {
+  public ResponseEntity<AddBoardResponse> addBoard(
+      @RequestHeader(value = TOKEN_HEADER) String token, @Valid @RequestBody AddBoardForm form) {
 
     String refinedToken = token.substring(TOKEN_PREFIX.length());
     return ResponseEntity.ok(AddBoardResponse.from(boardService.addBoard(refinedToken, form)));
@@ -56,21 +59,33 @@ public class BoardController {
 
   @PostMapping("/card")
   @PreAuthorize("hasAuthority('MEMBER')")
-  public ResponseEntity<?> addBoardCard(@RequestHeader(value = TOKEN_HEADER) String token, @Valid @RequestBody
-      AddUnitBoardCardForm form) {
+  public ResponseEntity<AddBoardCardResponse> addBoardCard(
+      @RequestHeader(value = TOKEN_HEADER) String token, @Valid @RequestBody AddUnitBoardCardForm form) {
 
     String refinedToken = token.substring(TOKEN_PREFIX.length());
-    return ResponseEntity.ok(AddBoardCardResponse.from(boardCardService.addBoardCard(refinedToken, form)));
+    return ResponseEntity.ok(
+        AddBoardCardResponse.from(boardCardService.addBoardCard(refinedToken, form)));
   }
 
   @PutMapping("/card")
   @PreAuthorize("hasAuthority('MEMBER')")
-  public ResponseEntity<?> updateBoardCard(@RequestHeader(value = TOKEN_HEADER) String token, @Valid @RequestBody
-      UpdateUnitBoardCardForm form) {
+  public ResponseEntity<UpdateBoardCardResponse> updateBoardCard(
+      @RequestHeader(value = TOKEN_HEADER) String token, @Valid @RequestBody UpdateUnitBoardCardForm form) {
 
     String refinedToken = token.substring(TOKEN_PREFIX.length());
-    return ResponseEntity.ok(UpdateBoardCardResponse.from(boardCardService.updateBoardCard(refinedToken, form)));
+    return ResponseEntity.ok(
+        UpdateBoardCardResponse.from(boardCardService.updateBoardCard(refinedToken, form)));
   }
 
+  @DeleteMapping("/card")
+  @PreAuthorize("hasAuthority('MEMBER')")
+  public ResponseEntity<Void> deleteBoardCard(
+      @RequestHeader(value = TOKEN_HEADER) String token,
+      @RequestParam(value = "cardId", name = "cardId", required = true, defaultValue = "0") Long boardCardId) {
+
+    String refinedToken = token.substring(TOKEN_PREFIX.length());
+    boardCardService.deleteBoardCard(refinedToken, boardCardId);
+    return ResponseEntity.ok().build();
+  }
 
 }
