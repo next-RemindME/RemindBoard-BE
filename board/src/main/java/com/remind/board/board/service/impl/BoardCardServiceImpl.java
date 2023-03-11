@@ -34,9 +34,7 @@ public class BoardCardServiceImpl implements BoardCardService {
     Board board = getBoardById(form.getBoardId());
     Member member = getMemberByToken(refinedToken);
 
-    if (!member.getId().equals(board.getMember().getId())) {
-      throw new BoardException(BoardErrorCode.NOT_ACCEPT_REWRITE);
-    }
+    validateWriter(member, board);
 
     return boardCardRepository.save(BoardCard.of(board, form));
   }
@@ -48,13 +46,9 @@ public class BoardCardServiceImpl implements BoardCardService {
     Board board = getBoardById(form.getBoardId());
     Member member = getMemberByToken(refinedToken);
 
-    if (!member.getId().equals(board.getMember().getId())) {
-      throw new BoardException(BoardErrorCode.NOT_ACCEPT_REWRITE);
-    }
+    validateWriter(member, board);
 
-    BoardCard boardCard = boardCardRepository.findById(form.getBoardCardId())
-        .orElseThrow(() -> new BoardException(BoardErrorCode.NOT_EXIST_CARD));
-
+    BoardCard boardCard = getBoardCardByCardId(form.getBoardCardId());
     return boardCard.updateBoardCard(board, form);
   }
 
@@ -63,15 +57,32 @@ public class BoardCardServiceImpl implements BoardCardService {
   public void deleteBoardCard(String refinedToken, Long boardCardId) {
 
     Member member = getMemberByToken(refinedToken);
+    BoardCard boardCard = getBoardCardByCardId(boardCardId);
 
-    BoardCard boardCard = boardCardRepository.findById(boardCardId)
-        .orElseThrow(() -> new BoardException(BoardErrorCode.NOT_EXIST_CARD));
+    validateWriter(member, boardCard);
+
+    boardCardRepository.delete(boardCard);
+  }
+
+  private void validateWriter(Member member, Board board) {
+
+    if (!member.getId().equals(board.getMember().getId())) {
+      throw new BoardException(BoardErrorCode.NOT_ACCEPT_REWRITE);
+    }
+  }
+
+  private void validateWriter(Member member, BoardCard boardCard) {
 
     if (!member.getId().equals(boardCard.getBoard().getMember().getId())) {
       throw new BoardException(BoardErrorCode.NOT_ACCEPT_REWRITE);
     }
+  }
 
-    boardCardRepository.delete(boardCard);
+  private BoardCard getBoardCardByCardId(Long boardCardId) {
+
+    BoardCard boardCard = boardCardRepository.findById(boardCardId)
+        .orElseThrow(() -> new BoardException(BoardErrorCode.NOT_EXIST_CARD));
+    return boardCard;
   }
 
   private Board getBoardById(Long boardId) {
