@@ -77,7 +77,8 @@ class MemberSignServiceTest {
     //then
     assertEquals(tokenProvider.getUsername(jwt), loginForm.getEmail());
     assertEquals(tokenProvider.getKeyRoles(jwt), tokenProvider.ROLE_MEMBER);
-    assertEquals(tokenProvider.validateToken(jwt), false); // 유효기간이 현재 시보다 미래인지 확인
+    assertEquals(tokenProvider.validateToken(jwt), true);
+    // 유효기간이 현재 시보다 미래인지 확인 (true 반환 시에만 JwtAuthenticationFilter 필터가 넘어가는 로직으로 작성되어 있아서 true를 반환해야 합니다)
   }
 
   @Test
