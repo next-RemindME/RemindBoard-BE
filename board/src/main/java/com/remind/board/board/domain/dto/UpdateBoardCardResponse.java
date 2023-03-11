@@ -16,6 +16,7 @@ public class UpdateBoardCardResponse {
   private Long boardCardId;
   private String description;
   private String cardOrders;
+  private String url;
 
   /**
    * BoardCard 엔티티를 BoardCardResponse로 변환해주는 메서드
@@ -25,6 +26,7 @@ public class UpdateBoardCardResponse {
     return UpdateBoardCardResponse.builder()
         .boardId(boardCard.getBoard().getId())
         .boardCardId(boardCard.getId())
+        .url(boardCard.getUrl())
         .description(boardCard.getDescription())
         .cardOrders(boardCard.getCardOrders())
         .build();
