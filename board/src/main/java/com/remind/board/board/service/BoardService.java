@@ -1,10 +1,9 @@
 package com.remind.board.board.service;
 
-import com.remind.board.board.domain.dto.AddBoardCardForm;
 import com.remind.board.board.domain.dto.AddBoardForm;
 import com.remind.board.board.domain.dto.BoardDto;
+import com.remind.board.board.domain.dto.UpdateUnitBoardForm;
 import com.remind.board.board.domain.entity.Board;
-import com.remind.board.board.domain.entity.BoardCard;
 import java.util.List;
 
 public interface BoardService {
@@ -17,4 +16,10 @@ public interface BoardService {
 
   /* board 추가(card 포함 or card 미포함) */
   Board addBoard(String refinedToken, AddBoardForm form);
+
+  /* board 수정 */
+  Board updateBoard(String refinedToken, UpdateUnitBoardForm form);
+
+  /* board 삭제 */
+  void deleteBoard(String refinedToken, Long boardId);
 }

@@ -1,6 +1,7 @@
 package com.remind.board.board.domain.entity;
 
 import com.remind.board.board.domain.dto.AddBoardForm;
+import com.remind.board.board.domain.dto.UpdateUnitBoardForm;
 import com.remind.board.common.entity.BaseEntity;
 import com.remind.board.member.domain.entity.Member;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class Board extends BaseEntity {
   /* board 공유 여부 */
   private boolean shareYn;
 
+  /* board 저장 시, entity 반환 메서드 */
   public static Board of(Member member, AddBoardForm form) {
 
     //사용자가 url card list를 입력하지 않아도 우선 부모 data인 board만 저장이 가능하도록 합니다.
@@ -75,6 +77,14 @@ public class Board extends BaseEntity {
                 .collect(Collectors.toList()))
         .shareYn(form.isShareYn())
         .build();
+  }
+
+  /* board 수정 메서드 */
+  public Board updateBoard(UpdateUnitBoardForm form) {
+    this.boardName = form.getBoardName();
+    this.boardOrders = form.getBoardOrders();
+    this.shareYn = form.isShareYn();
+    return this;
   }
 
 }
