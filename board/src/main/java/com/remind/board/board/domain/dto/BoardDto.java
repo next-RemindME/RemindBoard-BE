@@ -39,6 +39,7 @@ public class BoardDto {
     this.boardId = boardId;
     this.boardName = boardName;
     this.boardCards = boardCards;
+    this.boardOrders = boardOrders;
     this.shareYn = shareYn;
   }
 
