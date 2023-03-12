@@ -13,9 +13,9 @@ Remind Board 리뉴얼 버전에서 사용하는 API project 입니다.
 :mag_right: 개발환경
 ---
 - OS: `Window 10 Home`
-- Language: `JAVA 11`, `JavaScript`, `SQL`
+- Language: `JAVA 11`
 - ORM: `JPA`
-- Framework: `Spring Boot`
+- Framework: `Spring Boot`, `QueryDSL`
 - IDE: `IntelliJ IDEA community`
 - Database: `MariaDB`
 - ETC: `AWS`
